@@ -1,41 +1,36 @@
 // import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import { ListContacts, ListItem, DeleteButton } from './ContactsForm.styled';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from '../Redax/contactSlice';
-import { filterContact } from '../Redax/contactSlice';
-import { getContacts, getFilter } from 'Redax/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectVisibleContacts } from 'Redax/selectors';
+import { deleteContacts } from '../Redax/operations';
+import { setFilter } from 'Redax/filterSlice';
 
 export const ContactsList = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const contacts = useSelector(selectVisibleContacts);
+
 
   const dispatch = useDispatch();
 
   const onDeleteContact = contactId => {
-    dispatch(deleteContact(contactId));
-    dispatch(filterContact(''));
+    dispatch(deleteContacts(contactId));
+    dispatch(setFilter(''));
   };
 
   return (
     <>
       <ListContacts>
-        {contacts
-          .filter(contact =>
-            contact.name.toLowerCase().includes(filter.toLowerCase())
-          )
-          .map(element => {
-            return (
-              <ListItem key={nanoid()}>
-                <p>{element.name}:</p>
-                <p>{element.number}</p>
-                <DeleteButton onClick={() => onDeleteContact(element.id)}>
-                  delete contact
-                </DeleteButton>
-              </ListItem>
-            );
-          })}
+        {contacts.map(element => {
+          return (
+            <ListItem key={nanoid()}>
+              <p>{element.name}:</p>
+              <p>{element.number}</p>
+              <DeleteButton onClick={() => onDeleteContact(element.id)}>
+                delete contact
+              </DeleteButton>
+            </ListItem>
+          );
+        })}
       </ListContacts>
       <p></p>
     </>

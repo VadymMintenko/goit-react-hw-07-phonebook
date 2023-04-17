@@ -1,16 +1,15 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { filterContact } from '../Redax/contactSlice';
+
 import { useDispatch } from 'react-redux';
 import { getFilter } from 'Redax/selectors';
-
+import { setFilter } from 'Redax/filterSlice';
 export const Filter = () => {
   const dispatch = useDispatch();
   const filter = useSelector(getFilter);
-
   const searchContact = evt => {
-    dispatch(filterContact(evt.target.value.toLowerCase()));
+    dispatch(setFilter(evt.target.value.toLowerCase()));
   };
 
   return (
